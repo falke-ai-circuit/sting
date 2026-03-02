@@ -2,20 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --accent: #ff0040;
+  --text: #e0e0e0;
+  --dim: #444444;
+  --border: rgba(255,0,64,0.3);
+  
+  font-family: JetBrains Mono, Fira Code, monospace;
   line-height: 1.5;
   font-weight: 400;
   color-scheme: dark;
-  background-color: #0a0e17;
-  color: #e2e8f0;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+* {
+  border-radius: 0 !important;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  background-color: var(--bg);
 }
 
 #root {
   min-height: 100vh;
+}
+
+/* PCB-style borders */
+.border-sting-border {
+  border: 1px solid var(--border);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff3377;
 }
