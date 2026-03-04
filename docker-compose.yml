@@ -1,14 +1,35 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: sting
+      POSTGRES_USER: sting
+      POSTGRES_PASSWORD: sting123
+    volumes:
+      - sting_db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U sting]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   sting-backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "8001:8001"
-    network_mode: "host"
+      - 8001:8001
     environment:
-      - STING_DB_HOST=127.0.0.1
+      - STING_DB_HOST=postgres
       - STING_DB_PORT=5432
       - STING_DB_NAME=sting
       - STING_DB_USER=sting
       - STING_DB_PASSWORD=sting123
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  sting_db:
