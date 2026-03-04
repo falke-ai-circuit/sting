@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.db import init_db, close_db
 from app.proxy.ssh_proxy import start_ssh_proxy
-from app.api.v1 import sessions, events, live, tokens, samples, export
+from app.api.v1 import sessions, events, live, canaries, samples, export
 
 logging.basicConfig(
     level=logging.DEBUG if settings.debug else logging.INFO,
@@ -64,7 +64,7 @@ app.add_middleware(
 app.include_router(sessions.router, prefix=f"{settings.api_prefix}/sessions")
 app.include_router(events.router, prefix=f"{settings.api_prefix}/events")
 app.include_router(live.router, prefix=f"{settings.api_prefix}/live")
-app.include_router(tokens.router, prefix=f"{settings.api_prefix}")
+app.include_router(canaries.router, prefix=f"{settings.api_prefix}")
 app.include_router(samples.router, prefix=f"{settings.api_prefix}")
 app.include_router(export.router, prefix=f"{settings.api_prefix}")
 
