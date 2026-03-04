@@ -8,7 +8,7 @@ services:
     volumes:
       - sting_db:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - 5433:5432
     healthcheck:
       test: [CMD-SHELL, pg_isready -U sting]
       interval: 5s
@@ -30,6 +30,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+
+  sting-frontend:
+    image: nginx:alpine
+    volumes:
+      - ./frontend/dist:/usr/share/nginx/html:ro
+    ports:
+      - 3001:80
+    depends_on:
+      - sting-backend
 
 volumes:
   sting_db:
