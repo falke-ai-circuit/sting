@@ -11,7 +11,28 @@ interface Event {
 
 const API_BASE = 'http://10.10.10.102:8001/api/v1';
 
-export default function Events() {
+// Determine severity based on event type and score delta
+function getSeverity(event: Event): 'low' | 'medium' | 'high' | 'critical' {
+  const type = event.event_type.toLowerCase();
+  const delta = event.score_delta;
+  
+  // Critical events
+  if (type.includes('exploit') || type.includes('shell') || type.includes('root') || delta <= -50) {
+    return 'critical';
+  }
+  // High severity events
+  if (type.includes('attack') || type.includes('malware') || type.includes('payload') || delta <= -20) {
+    return 'high';
+  }
+  // Medium severity events
+  if (type.includes('scan') || type.includes('probe') || type.includes('auth_fail') || delta < 0) {
+    return 'medium';
+  }
+  // Default low
+  return 'low';
+}
+
+export default function Alerts() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -51,15 +72,20 @@ export default function Events() {
     return date.toLocaleString();
   };
 
+  const getSeverityBadge = (severity: string) => {
+    return <span className={`severity-badge ${severity}`}>{severity.toUpperCase()}</span>;
+  };
+
   return (
     <div className="events">
-      <h2>SSH Events</h2>
+      <h2>Alerts</h2>
       {events.length === 0 ? (
-        <p className="empty">No events yet</p>
+        <p className="empty">No alerts yet</p>
       ) : (
         <table className="data-table">
           <thead>
             <tr>
+              <th>Severity</th>
               <th>Timestamp</th>
               <th>Event Type</th>
               <th>IP Address</th>
@@ -70,8 +96,10 @@ export default function Events() {
           <tbody>
             {events.map((event) => {
               const details = getEventDetails(event);
+              const severity = getSeverity(event);
               return (
-                <tr key={event.id}>
+                <tr key={event.id} className={`severity-${severity}`}>
+                  <td>{getSeverityBadge(severity)}</td>
                   <td className="timestamp">{formatTime(event.ts)}</td>
                   <td><span className="event-type">{event.event_type}</span></td>
                   <td className="ip">{details.ip}</td>

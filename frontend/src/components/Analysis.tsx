@@ -11,7 +11,7 @@ interface Sample {
 
 const API_BASE = 'http://10.10.10.102:8001/api/v1';
 
-export default function Samples() {
+export default function Analysis() {
   const [samples, setSamples] = useState<Sample[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -52,7 +52,7 @@ export default function Samples() {
 
   return (
     <div className="samples">
-      <h2>Malware Samples</h2>
+      <h2>Payload Analysis</h2>
       {samples.length === 0 ? (
         <p className="empty">No samples uploaded</p>
       ) : (

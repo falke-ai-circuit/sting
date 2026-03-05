@@ -16,6 +16,27 @@ interface Session {
 
 const API_BASE = 'http://10.10.10.102:8001/api/v1';
 
+// Calculate duration from timestamps
+function calculateDuration(startedAt: string, endedAt: string | null): string {
+  const start = new Date(startedAt).getTime();
+  const end = endedAt ? new Date(endedAt).getTime() : Date.now();
+  const diffMs = end - start;
+  
+  if (diffMs < 1000) return '<1s';
+  
+  const seconds = Math.floor(diffMs / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  
+  if (hours > 0) {
+    return `${hours}h ${minutes % 60}m`;
+  } else if (minutes > 0) {
+    return `${minutes}m ${seconds % 60}s`;
+  } else {
+    return `${seconds}s`;
+  }
+}
+
 export default function Sessions() {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
@@ -79,6 +100,7 @@ export default function Sessions() {
             <tr>
               <th>ID</th>
               <th>Started</th>
+              <th>Duration</th>
               <th>Source IP</th>
               <th>Username</th>
               <th>Score</th>
@@ -91,6 +113,7 @@ export default function Sessions() {
               <tr key={session.id}>
                 <td className="session-id" title={session.id}>{session.id.slice(0, 8)}...</td>
                 <td className="timestamp">{formatTime(session.started_at)}</td>
+                <td className="duration">{calculateDuration(session.started_at, session.ended_at)}</td>
                 <td className="ip">{session.source_ip}:{session.source_port || '-'}</td>
                 <td className="username">{session.username || '-'}</td>
                 <td className={`score ${session.score >= 30 ? 'hostile' : session.score >= 10 ? 'suspicious' : ''}`}>

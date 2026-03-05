@@ -12,7 +12,7 @@ interface Canary {
 
 const API_BASE = 'http://10.10.10.102:8001/api/v1';
 
-export default function Canaries() {
+export default function Settings() {
   const [canaries, setCanaries] = useState<Canary[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -77,7 +77,7 @@ export default function Canaries() {
   return (
     <div className="canaries">
       <div className="header-row">
-        <h2>Canary Tokens</h2>
+        <h2>Configuration</h2>
         <button className="btn-primary" onClick={() => setShowForm(!showForm)}>
           {showForm ? 'Cancel' : '+ Create Canary'}
         </button>

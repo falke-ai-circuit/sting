@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import './App.css'
 import Dashboard from './components/Dashboard'
-import Events from './components/Events'
+import Alerts from './components/Alerts'
 import Sessions from './components/Sessions'
-import Samples from './components/Samples'
-import Canaries from './components/Canaries'
+import Analysis from './components/Analysis'
+import Settings from './components/Settings'
 
-type Tab = 'dashboard' | 'events' | 'sessions' | 'samples' | 'canaries'
+type Tab = 'dashboard' | 'alerts' | 'sessions' | 'analysis' | 'settings'
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
@@ -15,14 +15,14 @@ function App() {
     switch (activeTab) {
       case 'dashboard':
         return <Dashboard />
-      case 'events':
-        return <Events />
+      case 'alerts':
+        return <Alerts />
       case 'sessions':
         return <Sessions />
-      case 'samples':
-        return <Samples />
-      case 'canaries':
-        return <Canaries />
+      case 'analysis':
+        return <Analysis />
+      case 'settings':
+        return <Settings />
       default:
         return <Dashboard />
     }
@@ -42,10 +42,10 @@ function App() {
             Dashboard
           </button>
           <button
-            className={activeTab === 'events' ? 'active' : ''}
-            onClick={() => setActiveTab('events')}
+            className={activeTab === 'alerts' ? 'active' : ''}
+            onClick={() => setActiveTab('alerts')}
           >
-            Events
+            Alerts
           </button>
           <button
             className={activeTab === 'sessions' ? 'active' : ''}
@@ -54,16 +54,16 @@ function App() {
             Sessions
           </button>
           <button
-            className={activeTab === 'samples' ? 'active' : ''}
-            onClick={() => setActiveTab('samples')}
+            className={activeTab === 'analysis' ? 'active' : ''}
+            onClick={() => setActiveTab('analysis')}
           >
-            Samples
+            Analysis
           </button>
           <button
-            className={activeTab === 'canaries' ? 'active' : ''}
-            onClick={() => setActiveTab('canaries')}
+            className={activeTab === 'settings' ? 'active' : ''}
+            onClick={() => setActiveTab('settings')}
           >
-            Canaries
+            Settings
           </button>
         </nav>
       </aside>
