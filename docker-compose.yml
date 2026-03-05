@@ -27,6 +27,10 @@ services:
       - STING_DB_NAME=sting
       - STING_DB_USER=sting
       - STING_DB_PASSWORD=sting123
+      - REDIS_HOST=10.10.10.104
+      - REDIS_PORT=6379
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=7947899549
     depends_on:
       postgres:
         condition: service_healthy
@@ -39,6 +43,20 @@ services:
       - 3001:80
     depends_on:
       - sting-backend
+
+  sting-proxy:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      - REDIS_HOST=10.10.10.104
+      - REDIS_PORT=6379
+    depends_on:
+      - sting-backend
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 volumes:
   sting_db:
