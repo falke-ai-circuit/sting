@@ -61,9 +61,9 @@ app.add_middleware(
 )
 
 # Mount routers
-app.include_router(sessions.router, prefix=f"{settings.api_prefix}/sessions")
-app.include_router(events.router, prefix=f"{settings.api_prefix}/events")
-app.include_router(live.router, prefix=f"{settings.api_prefix}/live")
+app.include_router(sessions.router, prefix=f"{settings.api_prefix}")
+app.include_router(events.router, prefix=f"{settings.api_prefix}")
+app.include_router(live.router, prefix=f"{settings.api_prefix}")
 app.include_router(canaries.router, prefix=f"{settings.api_prefix}")
 app.include_router(samples.router, prefix=f"{settings.api_prefix}")
 app.include_router(export.router, prefix=f"{settings.api_prefix}")
