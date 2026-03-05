@@ -2,9 +2,11 @@ from fastapi import APIRouter, HTTPException, Query
 from typing import Optional, List
 from pydantic import BaseModel
 from app.core.db import get_conn
+from app.core.alerter import telegram_alerter
 from app.verdict.session_layer import session_layer, VerdictAction
 from app.verdict.engine import verdict_engine
 import json
+import asyncio
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])
 
@@ -38,7 +40,6 @@ async def list_sessions(
         for k in ("started_at", "ended_at", "committed_at", "nuked_at"):
             if s.get(k):
                 s[k] = s[k].isoformat()
-        # Live score from engine if active
         live_score = verdict_engine.get_score(s["id"])
         s["score"] = live_score
         s["live_state"] = verdict_engine.get_state(s["id"])
@@ -60,7 +61,6 @@ async def get_session(session_id: str):
         if s.get(k):
             s[k] = s[k].isoformat()
 
-    # Attach live layer diff if active
     buf = session_layer.get(session_id)
     if buf:
         s["layer_diff"] = await buf.diff()
@@ -99,13 +99,24 @@ async def apply_verdict(session_id: str, req: VerdictRequest):
     except KeyError:
         raise HTTPException(404, f"Session {session_id} not in active layer (already resolved?)")
 
-    # Update DB
     async with get_conn() as db:
         if action == VerdictAction.NUKE:
             await db.execute("""
                 UPDATE sessions SET verdict='NUKE', state='nuked', nuked_at=NOW(), ended_at=NOW()
                 WHERE id = $1::uuid
             """, session_id)
+            
+            # Get session details for Telegram alert
+            row = await db.fetchrow("SELECT * FROM sessions WHERE id = $1::uuid", session_id)
+            if row:
+                s = dict(row)
+                asyncio.create_task(telegram_alerter.send_nuke_alert(
+                    session_id=str(s["id"]),
+                    src_ip=s.get("src_ip", "unknown"),
+                    request_count=s.get("request_count", 0),
+                    first_seen=s["started_at"].isoformat() if s.get("started_at") else "unknown"
+                ))
+                
         elif action == VerdictAction.COMMIT:
             await db.execute("""
                 UPDATE sessions SET verdict='COMMIT', state='committed', committed_at=NOW(), ended_at=NOW()
