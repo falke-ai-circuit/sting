@@ -32,6 +32,8 @@ services:
       - REDIS_PORT=6379
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - TELEGRAM_CHAT_ID=7947899549
+    cap_add:
+      - NET_ADMIN
     depends_on:
       postgres:
         condition: service_healthy
