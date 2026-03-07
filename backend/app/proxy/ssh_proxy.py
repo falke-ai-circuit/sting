@@ -59,8 +59,18 @@ class STINGSSHServer(asyncssh.SSHServer):
     def password_auth_requested(self, username: str) -> str | bool:
         return True  # Accept all — trap mode
 
-    def password_auth_completed(self, username: str, result: bool) -> None:
-        asyncio.create_task(self._handle_auth(username, result))
+    def validate_password(self, username: str, password: str) -> bool:
+        """Accept any password — this is the honeypot trap."""
+        asyncio.create_task(self._handle_auth(username, True))
+        return True
+
+    def public_key_auth_requested(self) -> bool:
+        return True
+
+    def validate_public_key(self, username: str, key) -> bool:
+        """Accept any public key — trap mode."""
+        asyncio.create_task(self._handle_auth(username, True))
+        return True
 
     async def _handle_auth(self, username: str, result: bool):
         if not result:
