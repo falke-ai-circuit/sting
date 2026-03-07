@@ -9,7 +9,7 @@ interface Event {
   ts: string;
 }
 
-const API_BASE = 'http://10.10.10.102:8001/api/v1';
+const API_BASE = "/api/v1"
 
 // Determine severity based on event type and score delta
 function getSeverity(event: Event): 'low' | 'medium' | 'high' | 'critical' {

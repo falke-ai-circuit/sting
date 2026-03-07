@@ -8,7 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.db import init_db, close_db
 from app.proxy.ssh_proxy import start_ssh_proxy
-from app.api.v1 import sessions, events, live, canaries, samples, export, stats
+from app.verdict.engine import verdict_engine
+from app.api.v1 import sessions, events, live, canaries, samples, export, stats, webhook, lab
 
 logging.basicConfig(
     level=logging.DEBUG if settings.debug else logging.INFO,
@@ -23,6 +24,11 @@ async def lifespan(app: FastAPI):
     logger.info("Initializing database pool...")
     await init_db()
     logger.info("Database pool ready")
+
+    # Init Redis for score persistence
+    logger.info("Initializing Redis score persistence...")
+    await verdict_engine.init_redis()
+    logger.info("Redis ready")
 
     # Start SSH proxy
     logger.info("Starting STING SSH proxy on port %d...", settings.ssh_proxy_port)
@@ -68,6 +74,8 @@ app.include_router(canaries.router, prefix=f"{settings.api_prefix}")
 app.include_router(samples.router, prefix=f"{settings.api_prefix}")
 app.include_router(export.router, prefix=f"{settings.api_prefix}")
 app.include_router(stats.router, prefix=f"{settings.api_prefix}")
+app.include_router(webhook.router, prefix=f"{settings.api_prefix}")
+app.include_router(lab.router, prefix=f"{settings.api_prefix}")
 
 
 @app.get("/health")

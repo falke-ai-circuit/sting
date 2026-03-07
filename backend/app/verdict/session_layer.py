@@ -4,6 +4,10 @@ from uuid import UUID
 from datetime import datetime
 from enum import Enum
 import logging
+import json
+
+from app.execution.nuke_executor import nuke_executor
+from app.core.db import get_conn
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +88,25 @@ class SessionBuffer:
         logger.info(f"[{self.session_id}] LAB snapshot shipped — proxy side wiped")
         return snapshot
 
+    async def store_lab_snapshot(self, snapshot: dict):
+        """Persist LAB snapshot to PostgreSQL."""
+        try:
+            async with get_conn() as db:
+                await db.execute("""
+                    INSERT INTO lab_snapshots (
+                        session_id, source_ip, writes, commands, reads, created_at
+                    ) VALUES ($1, $2, $3, $4, $5, NOW())
+                """, 
+                    snapshot["session_id"],
+                    snapshot["source_ip"],
+                    json.dumps(snapshot.get("writes", {})),
+                    json.dumps(snapshot.get("commands", [])),
+                    json.dumps(snapshot.get("reads", []))
+                )
+                logger.info(f"LAB snapshot stored for session {self.session_id}")
+        except Exception as e:
+            logger.error(f"Failed to store LAB snapshot: {e}")
+
 
 class SessionLayerManager:
     """Global manager for all active session buffers."""
@@ -107,13 +130,21 @@ class SessionLayerManager:
             raise KeyError(f"Session {session_id} not found in layer manager")
 
         if action == VerdictAction.NUKE:
+            # Execute NUKE: wipe buffer AND ban the IP
             await buf.nuke()
-            result = {"action": "NUKE", "session_id": session_id}
+            nuke_result = await nuke_executor.execute_nuke(session_id, buf.source_ip)
+            result = {
+                "action": "NUKE",
+                "session_id": session_id,
+                "execution": nuke_result
+            }
         elif action == VerdictAction.COMMIT:
             writes = await buf.commit()
             result = {"action": "COMMIT", "session_id": session_id, "files_written": len(writes)}
         elif action == VerdictAction.LAB:
+            # Get snapshot and store to database
             snapshot = await buf.lab()
+            await buf.store_lab_snapshot(snapshot)
             result = {"action": "LAB", "session_id": session_id, "snapshot": snapshot}
         else:
             raise ValueError(f"Unknown action: {action}")

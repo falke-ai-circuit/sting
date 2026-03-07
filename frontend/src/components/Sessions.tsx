@@ -14,7 +14,7 @@ interface Session {
   live_state: string | null;
 }
 
-const API_BASE = 'http://10.10.10.102:8001/api/v1';
+const API_BASE = "/api/v1"
 
 // Calculate duration from timestamps
 function calculateDuration(startedAt: string, endedAt: string | null): string {

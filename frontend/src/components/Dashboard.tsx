@@ -16,7 +16,7 @@ interface AlertEvent {
   ts: string;
 }
 
-const API_BASE = 'http://10.10.10.102:8001/api/v1';
+const API_BASE = "/api/v1"
 
 export default function Dashboard() {
   const [stats, setStats] = useState<Stats | null>(null);

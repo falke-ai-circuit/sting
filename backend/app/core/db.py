@@ -83,7 +83,35 @@ async def _create_schema():
                 uploaded_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
 
+            CREATE TABLE IF NOT EXISTS lab_snapshots (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                session_id UUID REFERENCES sessions(id) ON DELETE SET NULL,
+                source_ip TEXT,
+                snapshot JSONB NOT NULL DEFAULT '{}',
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            );
+
+            CREATE TABLE IF NOT EXISTS webhook_events (
+                id BIGSERIAL PRIMARY KEY,
+                source TEXT NOT NULL DEFAULT 'cowrie',
+                event_type TEXT NOT NULL,
+                src_ip TEXT,
+                session_ref TEXT,
+                raw JSONB NOT NULL DEFAULT '{}',
+                received_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            );
+
+            CREATE TABLE IF NOT EXISTS banned_ips (
+                ip TEXT PRIMARY KEY,
+                session_id UUID REFERENCES sessions(id) ON DELETE SET NULL,
+                banned_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                reason TEXT
+            );
+
             CREATE INDEX IF NOT EXISTS idx_events_session ON events(session_id);
             CREATE INDEX IF NOT EXISTS idx_events_ts ON events(ts DESC);
             CREATE INDEX IF NOT EXISTS idx_sessions_state ON sessions(state);
+            CREATE INDEX IF NOT EXISTS idx_lab_snapshots_session ON lab_snapshots(session_id);
+            CREATE INDEX IF NOT EXISTS idx_lab_snapshots_created ON lab_snapshots(created_at DESC);
+            CREATE INDEX IF NOT EXISTS idx_webhook_events_received ON webhook_events(received_at DESC);
         """)

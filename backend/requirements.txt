@@ -5,6 +5,5 @@ asyncssh
 pydantic-settings
 httpx
 python-multipart
-python-multipart
 aiohttp
-aiohttp
+redis[asyncio]

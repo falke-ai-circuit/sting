@@ -10,7 +10,7 @@ interface Canary {
   triggered_at: string | null;
 }
 
-const API_BASE = 'http://10.10.10.102:8001/api/v1';
+const API_BASE = "/api/v1"
 
 export default function Settings() {
   const [canaries, setCanaries] = useState<Canary[]>([]);

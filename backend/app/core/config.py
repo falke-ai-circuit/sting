@@ -13,6 +13,11 @@ class Settings(BaseSettings):
     db_user: str = "sting"
     db_password: str = "sting123"
 
+    # Redis
+    redis_host: str = "10.10.10.104"
+    redis_port: int = 6379
+    redis_db: int = 0
+
     # Proxy
     ssh_proxy_port: int = 2222
     ssh_upstream_host: str = "10.10.10.100"
