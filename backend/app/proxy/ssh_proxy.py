@@ -56,16 +56,16 @@ class STINGSSHServer(asyncssh.SSHServer):
             """, self._session_id, self._client_addr)
         await verdict_engine.score_event(self._session_id, "connection_attempt")
 
-    def password_auth_requested(self, username: str) -> str | bool:
-        return True  # Accept all — trap mode
+    def password_auth_supported(self) -> bool:
+        return True  # Accept password auth — trap mode
 
     def validate_password(self, username: str, password: str) -> bool:
         """Accept any password — this is the honeypot trap."""
         asyncio.create_task(self._handle_auth(username, True))
         return True
 
-    def public_key_auth_requested(self) -> bool:
-        return True
+    def public_key_auth_supported(self) -> bool:
+        return True  # Accept pubkey auth — trap mode
 
     def validate_public_key(self, username: str, key) -> bool:
         """Accept any public key — trap mode."""
