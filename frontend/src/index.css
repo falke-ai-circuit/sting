@@ -1,68 +1,734 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Source+Code+Pro:wght@300;400;500;600;700&display=swap');
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --cyber-red: #ff0040;
+  --cyber-black: #0a0a0a;
+  --cyber-dark: #111111;
+  --cyber-gray: #333333;
+  --cyber-red-dark: #cc0033;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
 }
-a:hover {
-  color: #535bf2;
+
+html {
+  font-size: 15px; /* Base font size for entire app */
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  font-family: 'JetBrains Mono', 'Source Code Pro', 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0a0a0a;
+  color: #e0e0e0;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+  font-size: 1rem; /* 14px */
+  line-height: 1.5;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+code {
+  font-family: 'JetBrains Mono', 'Source Code Pro', 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+/* Custom scrollbar - Cyberpunk style */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111111;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ff0040;
+  border-radius: 0;
+  box-shadow: 0 0 5px rgba(255, 0, 64, 0.5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #cc0033;
+  box-shadow: 0 0 10px rgba(255, 0, 64, 0.8);
+}
+
+/* Terminal styles */
+.xterm {
+  background-color: #0a0a0a !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.xterm .xterm-viewport {
+  background-color: #0a0a0a !important;
+}
+
+/* Cyberpunk glow effects */
+.cyber-glow {
+  text-shadow: 0 0 5px currentColor;
+}
+
+.cyber-glow-red {
+  text-shadow: 0 0 10px #ff0040, 0 0 20px #ff0040, 0 0 30px #ff0040;
+}
+
+.cyber-glow-green {
+  text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 30px #00ff88;
+}
+
+.cyber-glow-purple {
+  text-shadow: 0 0 10px #8b5cf6, 0 0 20px #8b5cf6, 0 0 30px #8b5cf6;
+}
+
+.cyber-border {
+  border: 1px solid #2a2a2a;
+}
+
+.cyber-border:hover {
+  border-color: #3a3a3a;
+}
+
+/* Dashboard cards - Cyberpunk style */
+.dashboard-card {
+  background: linear-gradient(135deg, #111111 0%, #1a1a1a 100%);
+  border: 1px solid #2a2a2a;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.dashboard-card:hover {
+  border-color: #3a3a3a;
+}
+
+/* Status indicators - Cyberpunk colors */
+.status-online {
+  color: #00ff88;
+  text-shadow: 0 0 5px #00ff88;
+}
+
+.status-offline {
+  color: #ff0040;
+  text-shadow: 0 0 5px #ff0040;
+}
+
+.status-warning {
+  color: #ffff00;
+  text-shadow: 0 0 5px #ffff00;
+}
+
+.status-unknown {
+  color: #8b5cf6;
+  text-shadow: 0 0 5px #8b5cf6;
+}
+
+/* =====================================================
+   STANDARDIZED BUTTON SYSTEM
+   All buttons should use these classes for consistency
+   ===================================================== */
+
+/* Base button - all buttons inherit from this */
+.btn-base {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 2px;
+  transition: all 0.2s ease;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+/* Button sizes - USE THESE FOR CONSISTENCY */
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.65rem;
+  line-height: 1.2;
+}
+
+.btn-md {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.7rem;
+  line-height: 1.3;
+}
+
+.btn-lg {
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+/* Button color variants - outline style */
+.btn-red {
+  border: 1px solid #ff0040;
+  color: #ff0040;
+  background: transparent;
+}
+.btn-red:hover:not(:disabled) {
+  background: #ff0040;
+  color: white;
+  box-shadow: 0 0 10px rgba(255, 0, 64, 0.4);
+}
+
+.btn-blue {
+  border: 1px solid #00b7ff;
+  color: #00b7ff;
+  background: transparent;
+}
+.btn-blue:hover:not(:disabled) {
+  background: #00b7ff;
+  color: white;
+  box-shadow: 0 0 10px rgba(0, 183, 255, 0.4);
+}
+
+.btn-green {
+  border: 1px solid #00ff88;
+  color: #00ff88;
+  background: transparent;
+}
+.btn-green:hover:not(:disabled) {
+  background: #00ff88;
+  color: #0a0a0a;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+}
+
+.btn-purple {
+  border: 1px solid #8b5cf6;
+  color: #8b5cf6;
+  background: transparent;
+}
+.btn-purple:hover:not(:disabled) {
+  background: #8b5cf6;
+  color: white;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+}
+
+.btn-gray {
+  border: 1px solid #4a4a4a;
+  color: #888888;
+  background: transparent;
+}
+.btn-gray:hover:not(:disabled) {
+  border-color: #666666;
+  color: #aaaaaa;
+}
+
+/* Disabled state */
+.btn-base:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Icon-only button (settings, close, etc) */
+.btn-icon {
+  padding: 0.25rem 0.375rem;
+  font-size: 0.75rem;
+}
+
+/* Filter button (toggle style) */
+.btn-filter {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.65rem;
+  border-radius: 3px;
+}
+.btn-filter.active {
+  background: rgba(var(--filter-color), 0.1);
+}
+
+/* Legacy btn-cyber - kept for backwards compatibility */
+.btn-cyber {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  border: 1px solid #3a3a3a;
+  color: #e0e0e0;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.btn-cyber:hover {
+  border-color: #ff0040;
+  color: #ff0040;
+  box-shadow: 0 0 10px rgba(255, 0, 64, 0.3);
+  text-shadow: 0 0 5px #ff0040;
+}
+
+/* Active button states */
+.btn-cyber-active-green {
+  border: 2px solid #00ff88 !important;
+  color: #00ff88 !important;
+  background: rgba(0, 255, 136, 0.1) !important;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.3) !important;
+}
+
+.btn-cyber-active-red {
+  border: 2px solid #ff0040 !important;
+  color: #ff0040 !important;
+  background: rgba(255, 0, 64, 0.1) !important;
+  box-shadow: 0 0 15px rgba(255, 0, 64, 0.3) !important;
+}
+
+.btn-cyber-active-purple {
+  border: 2px solid #8b5cf6 !important;
+  color: #8b5cf6 !important;
+  background: rgba(139, 92, 246, 0.1) !important;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3) !important;
+}
+
+.btn-cyber-purple {
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+}
+
+.btn-cyber-purple:hover {
+  border-color: #a78bfa;
+  color: #a78bfa;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+  text-shadow: 0 0 5px #8b5cf6;
+}
+
+/* Input styles */
+.input-cyber {
+  background: #111111;
+  border: 1px solid #2a2a2a;
+  color: #e0e0e0;
+  font-family: 'JetBrains Mono', monospace;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.input-cyber:focus {
+  outline: none;
+  border-color: #ff0040;
+  box-shadow: 0 0 10px rgba(255, 0, 64, 0.2);
+}
+
+/* Prevent autofill white background */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #111111 inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow: 0 0 0 30px #111111 inset !important;
+}
+
+input[type="text"],
+input[type="password"] {
+  background-color: #111111 !important;
+  color: #ffffff !important;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  background-color: #111111 !important;
+  color: #ffffff !important;
+}
+
+.input-cyber::placeholder {
+  color: #666666;
+  font-style: italic;
+}
+
+/* Sidebar transition */
+.sidebar-transition {
+  transition: width 0.3s ease, transform 0.3s ease;
+}
+
+/* Topology visualization - Cyberpunk style */
+.topology-container {
+  background: linear-gradient(135deg, #0a0a0a 0%, #111111 100%);
+  border: 1px solid #2a2a2a;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px rgba(255, 0, 64, 0.05);
+}
+
+/* Loading animations */
+@keyframes cyber-pulse {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 5px currentColor;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+  50% {
+    opacity: 0.7;
+    text-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
   }
 }
+
+.cyber-pulse {
+  animation: cyber-pulse 2s ease-in-out infinite;
+}
+
+/* Selection styles */
+::selection {
+  background: rgba(255, 0, 64, 0.3);
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background: rgba(255, 0, 64, 0.3);
+  color: #ffffff;
+}
+
+/* Slide in animation for right panel */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+/* =====================================================
+   UNIFIED DESIGN SYSTEM - ALL PAGES
+   Use these standardized classes for consistency
+   ===================================================== */
+
+/* CARDS & CONTAINERS */
+.cyber-card {
+  background: linear-gradient(135deg, #111111 0%, #1a1a1a 100%);
+  border: 1px solid #2a2a2a;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.cyber-card:hover {
+  border-color: #3a3a3a;
+}
+
+.cyber-card-interactive:hover {
+  border-color: #ff0040;
+  box-shadow: 0 0 10px rgba(255, 0, 64, 0.2);
+  transform: scale(1.01);
+}
+
+/* SECTION HEADERS */
+.cyber-section-header {
+  background: #111111;
+  border-bottom: 1px solid #2a2a2a;
+  padding: 0.75rem 1rem;
+}
+
+.cyber-section-title {
+  font-size: 0.75rem;
+  color: #8b5cf6;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.cyber-section-subtitle {
+  font-size: 0.625rem;
+  color: #00d4ff;
+  font-family: 'JetBrains Mono', monospace;
+  margin-top: 0.25rem;
+}
+
+/* PANELS & MODALS */
+.cyber-panel {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+}
+
+.cyber-panel-header {
+  background: #111111;
+  border-bottom: 1px solid #2a2a2a;
+  padding: 1rem;
+}
+
+.cyber-modal {
+  background: #1a1a1a;
+  border: 2px solid #8b5cf6;
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+}
+
+/* INPUT FIELDS - STANDARDIZED */
+.cyber-input {
+  background: #111111;
+  border: 1px solid #2a2a2a;
+  color: #00d4ff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  border-radius: 2px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.cyber-input:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
+}
+
+.cyber-input::placeholder {
+  color: #666666;
+  font-style: italic;
+}
+
+.cyber-select {
+  background: #111111;
+  border: 1px solid #2a2a2a;
+  color: #00d4ff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  border-radius: 2px;
+  outline: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.cyber-select:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
+}
+
+/* SLIDERS - STANDARDIZED */
+.cyber-slider {
+  width: 100%;
+  height: 8px;
+  background: #111111;
+  border-radius: 0;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.cyber-slider::-webkit-slider-track {
+  background: #2a2a2a;
+  height: 2px;
+  border: 1px solid #8b5cf6;
+}
+
+.cyber-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #ff0040;
+  border: 2px solid #ff0040;
+  box-shadow: 0 0 8px rgba(255, 0, 64, 0.6);
+  cursor: pointer;
+}
+
+.cyber-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 12px rgba(255, 0, 64, 0.9);
+}
+
+.cyber-slider::-moz-range-track {
+  background: #2a2a2a;
+  height: 2px;
+  border: 1px solid #8b5cf6;
+}
+
+.cyber-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: #ff0040;
+  border: 2px solid #ff0040;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+/* TABS - STANDARDIZED */
+.cyber-tab {
+  padding: 0.5rem 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+  border: 2px solid #3a3a3a;
+  background: transparent;
+  cursor: pointer;
+}
+
+.cyber-tab:hover:not(.cyber-tab-active) {
+  border-color: #666666;
+  color: #e0e0e0;
+}
+
+.cyber-tab-active {
+  background: var(--tab-bg-color, #00d4ff);
+  color: #000000;
+  border-color: var(--tab-border-color, #00d4ff);
+}
+
+/* Tab color variants */
+.cyber-tab-red.cyber-tab-active {
+  --tab-bg-color: #ff0040;
+  --tab-border-color: #ff0040;
+}
+
+.cyber-tab-blue.cyber-tab-active {
+  --tab-bg-color: #00d4ff;
+  --tab-border-color: #00d4ff;
+}
+
+.cyber-tab-green.cyber-tab-active {
+  --tab-bg-color: #00ff88;
+  --tab-border-color: #00ff88;
+}
+
+.cyber-tab-purple.cyber-tab-active {
+  --tab-bg-color: #8b5cf6;
+  --tab-border-color: #8b5cf6;
+}
+
+/* BADGES & LABELS */
+.cyber-badge {
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.cyber-badge-online {
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid #00ff88;
+  color: #00ff88;
+}
+
+.cyber-badge-offline {
+  background: rgba(255, 0, 64, 0.1);
+  border: 1px solid #ff0040;
+  color: #ff0040;
+}
+
+.cyber-badge-warning {
+  background: rgba(255, 255, 0, 0.1);
+  border: 1px solid #ffff00;
+  color: #ffff00;
+}
+
+.cyber-badge-info {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid #8b5cf6;
+  color: #8b5cf6;
+}
+
+/* DIVIDERS */
+.cyber-divider {
+  height: 1px;
+  background: #2a2a2a;
+  border: none;
+}
+
+.cyber-divider-glow {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #8b5cf6, transparent);
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
+  border: none;
+}
+
+/* CUSTOM SCROLLBAR - UNIFIED */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #111111;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #ff0040;
+  box-shadow: 0 0 5px rgba(255, 0, 64, 0.5);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cc0033;
+  box-shadow: 0 0 10px rgba(255, 0, 64, 0.8);
+}
+
+/* PAGE TITLES */
+.cyber-page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.cyber-page-title-red {
+  color: #ff0040;
+  text-shadow: 0 0 10px #ff0040, 0 0 20px #ff0040, 0 0 30px #ff0040;
+}
+
+.cyber-page-title-blue {
+  color: #00d4ff;
+  text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 30px #00d4ff;
+}
+
+.cyber-page-title-green {
+  color: #00ff88;
+  text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 30px #00ff88;
+}
+
+.cyber-page-title-purple {
+  color: #8b5cf6;
+  text-shadow: 0 0 10px #8b5cf6, 0 0 20px #8b5cf6, 0 0 30px #8b5cf6;
+}
+
+/* ============================================
+   REACT FLOW CONTROLS - CYBERPUNK OVERRIDE
+   ============================================ */
+.react-flow__controls {
+  background: #0d0d0d !important;
+  border: 1px solid #2a2a2a !important;
+  border-radius: 0 !important;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.3) !important;
+}
+
+.react-flow__controls-button {
+  background: #0d0d0d !important;
+  border: none !important;
+  border-bottom: 1px solid #2a2a2a !important;
+  color: #8b5cf6 !important;
+  fill: #8b5cf6 !important;
+  width: 28px !important;
+  height: 28px !important;
+  transition: all 0.2s ease !important;
+}
+
+.react-flow__controls-button:hover {
+  background: rgba(139, 92, 246, 0.2) !important;
+  box-shadow: inset 0 0 10px rgba(139, 92, 246, 0.3) !important;
+}
+
+.react-flow__controls-button:last-child {
+  border-bottom: none !important;
+}
+
+.react-flow__controls-button svg {
+  fill: #8b5cf6 !important;
+  max-width: 14px !important;
+  max-height: 14px !important;
+}
+
+.react-flow__controls-button:hover svg {
+  fill: #a78bfa !important;
+}
+
+/* ============================================
+   EXECUTION CONSOLE - SLIDE ANIMATION
+   ============================================ */
+/* Console animations removed - console is now always visible */
