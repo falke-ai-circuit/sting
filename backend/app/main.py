@@ -9,7 +9,7 @@ from app.core.config import settings
 from app.core.db import init_db, close_db
 from app.proxy.ssh_proxy import start_ssh_proxy
 from app.verdict.engine import verdict_engine
-from app.api.v1 import sessions, events, live, canaries, samples, export, stats, webhook, lab
+from app.api.v1 import sessions, events, live, canaries, samples, export, stats, webhook, lab, snapshots, verdict
 
 logging.basicConfig(
     level=logging.DEBUG if settings.debug else logging.INFO,
@@ -76,6 +76,8 @@ app.include_router(export.router, prefix=f"{settings.api_prefix}")
 app.include_router(stats.router, prefix=f"{settings.api_prefix}")
 app.include_router(webhook.router, prefix=f"{settings.api_prefix}")
 app.include_router(lab.router, prefix=f"{settings.api_prefix}")
+app.include_router(snapshots.router, prefix=f"{settings.api_prefix}")
+app.include_router(verdict.router, prefix=f"{settings.api_prefix}")
 
 
 @app.get("/health")

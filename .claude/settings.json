@@ -1,29 +1,11 @@
 {
     "env": {
-        "ANTHROPIC_BASE_URL": "https://api.minimax.io/anthropic",
-        "ANTHROPIC_AUTH_TOKEN": "sk-cp-i_7EhtBSBRy5tc5foq3WBBcZu6AYVUxU_sX9AEBPhB35SdRc5RdA5zybmJAljzjE9CkNZr6zOsA5hp65E0Z0luWN8XWXlBXYGc5qnDZ7xbYtaTrkZU0HV2k",
-        "ANTHROPIC_MODEL": "MiniMax-M2.5",
-        "ANTHROPIC_SMALL_FAST_MODEL": "MiniMax-M2.5",
-        "ANTHROPIC_DEFAULT_SONNET_MODEL": "MiniMax-M2.5"
+        "ANTHROPIC_BASE_URL": "https://api.kimi.com/coding",
+        "ANTHROPIC_AUTH_TOKEN": "sk-kimi-2PJqa4a9Lak1qpu0r3Ewbil0JYcXQM13Yyd8jloPG4Yt7VJJKkzQBgpRmOkl7tN7",
+        "ANTHROPIC_MODEL": "kimi-for-coding",
+        "ANTHROPIC_SMALL_FAST_MODEL": "kimi-for-coding",
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": "kimi-for-coding"
     },
-    "permissions": {
-        "allow": [
-            "Bash(*)",
-            "Read(*)",
-            "Write(*)",
-            "Edit(*)",
-            "Glob(*)",
-            "Grep(*)",
-            "LS(*)",
-            "WebFetch(*)",
-            "WebSearch(*)",
-            "Task(*)",
-            "TodoWrite(*)",
-            "TodoRead(*)",
-            "TodoUpdate(*)",
-            "TodoDelete(*)"
-        ],
-        "defaultMode": "dontAsk"
-    },
-    "model": "minimax-code/MiniMax-M2.5"
+    "permissions": { "allow": ["Bash(*)","Read(*)","Write(*)","Edit(*)","Glob(*)","Grep(*)","LS(*)","WebFetch(*)","WebSearch(*)","Task(*)","TodoWrite(*)","TodoRead(*)","TodoUpdate(*)","TodoDelete(*)"], "defaultMode": "dontAsk" },
+    "model": "kimi-coding/kimi-for-coding"
 }
