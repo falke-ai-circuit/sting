@@ -3,7 +3,7 @@ Verdict router for session verdict retrieval.
 
 GET /api/v1/verdict/{session_id} — Get computed verdict for a session
 """
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from app.core.db import get_conn
 
 router = APIRouter(prefix="/verdict", tags=["verdict"])
@@ -34,7 +34,7 @@ async def get_verdict(session_id: str):
             """, session_id)
 
             if not session:
-                raise HTTPException(404, f"Session {session_id} not found")
+                return {"detail": f"Session {session_id} not found"}
 
             # Get aggregated score and event count from events table
             row = await db.fetchrow("""
@@ -46,7 +46,7 @@ async def get_verdict(session_id: str):
                 WHERE session_id = $1::uuid
             """, session_id)
         except Exception:
-            raise HTTPException(404, f"Session {session_id} not found")
+            return {"detail": f"Session {session_id} not found"}
 
     score = row["total_score"]
     events_count = row["events_count"]
