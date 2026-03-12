@@ -21,6 +21,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8001:8001
+      - 8090:8090
       - 2222:2222
     environment:
       - STING_DB_HOST=postgres
@@ -32,6 +33,8 @@ services:
       - REDIS_PORT=6379
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - TELEGRAM_CHAT_ID=7947899549
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     cap_add:
       - NET_ADMIN
     depends_on:

@@ -8,6 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.db import init_db, close_db
 from app.proxy.ssh_proxy import start_ssh_proxy
+from app.proxy.http_proxy import start_http_proxy
+from app.lab.executor import lab_worker_loop
 from app.verdict.engine import verdict_engine
 from app.api.v1 import sessions, events, live, canaries, samples, export, stats, webhook, lab, snapshots, verdict
 
@@ -36,6 +38,17 @@ async def lifespan(app: FastAPI):
     await asyncio.sleep(0.5)  # Let server bind
     logger.info("SSH proxy started")
 
+    # Start HTTP proxy (verdict-aware)
+    logger.info("Starting STING HTTP proxy on port 8090...")
+    http_task = asyncio.create_task(start_http_proxy())
+    await asyncio.sleep(0.5)
+    logger.info("HTTP proxy started")
+
+    # Start Lab executor worker
+    logger.info("Starting Lab executor worker...")
+    lab_task = asyncio.create_task(lab_worker_loop())
+    logger.info("Lab executor started")
+
     yield
 
     # Shutdown
@@ -43,6 +56,20 @@ async def lifespan(app: FastAPI):
     ssh_task.cancel()
     try:
         await ssh_task
+    except asyncio.CancelledError:
+        pass
+
+    logger.info("Shutting down HTTP proxy...")
+    http_task.cancel()
+    try:
+        await http_task
+    except asyncio.CancelledError:
+        pass
+
+    logger.info("Shutting down Lab executor...")
+    lab_task.cancel()
+    try:
+        await lab_task
     except asyncio.CancelledError:
         pass
 
