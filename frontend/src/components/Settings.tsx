@@ -4,10 +4,11 @@ interface Canary {
   id: string;
   name: string;
   canary_type: string;
-  value: string;
-  triggered_by: string | null;
+  path?: string;
+  content?: string;
+  hit_count: number;
+  is_active: boolean;
   created_at: string;
-  triggered_at: string | null;
 }
 
 const API_BASE = "/api/v1"
@@ -18,17 +19,17 @@ const typeConfig: Record<string, { label: string; color: string }> = {
   ssh_password: { label: 'SSH PASSWORD', color: 'bg-red-600' },
   web_credential: { label: 'WEB CREDENTIAL', color: 'bg-blue-600' },
   api_token: { label: 'API TOKEN', color: 'bg-green-600' },
-  ssh: { label: 'SSH KEY', color: 'bg-purple-600' },
-  http: { label: 'WEB CREDENTIAL', color: 'bg-blue-600' },
   file: { label: 'FILE TOKEN', color: 'bg-orange-600' },
-  dns: { label: 'DNS TOKEN', color: 'bg-yellow-600' },
+  credential: { label: 'CREDENTIAL', color: 'bg-yellow-600' },
+  url: { label: 'URL', color: 'bg-indigo-600' },
+  dns: { label: 'DNS', color: 'bg-pink-600' },
 };
 
 export default function Settings() {
   const [canaries, setCanaries] = useState<Canary[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ name: '', canary_type: 'ssh', value: '' });
+  const [formData, setFormData] = useState({ name: '', canary_type: 'ssh_key', path: '' });
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -51,17 +52,22 @@ export default function Settings() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!formData.name || !formData.value) return;
+    if (!formData.name) return;
 
     setSubmitting(true);
     try {
       const res = await fetch(`${API_BASE}/canaries`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          name: formData.name,
+          canary_type: formData.canary_type,
+          path: formData.path || null,
+          content: null
+        })
       });
       if (res.ok) {
-        setFormData({ name: '', canary_type: 'ssh', value: '' });
+        setFormData({ name: '', canary_type: 'ssh_key', path: '' });
         setShowForm(false);
         fetchCanaries();
       }
@@ -84,9 +90,9 @@ export default function Settings() {
 
   // Calculate stats
   const total = canaries.length;
-  const triggered = canaries.filter(c => c.triggered_at).length;
-  const active = canaries.filter(c => !c.triggered_at).length;
-  const attackers = new Set(canaries.filter(c => c.triggered_by).map(c => c.triggered_by)).size;
+  const triggered = canaries.filter(c => c.hit_count > 0).length;
+  const active = canaries.filter(c => c.is_active).length;
+  const attackers = new Set(canaries.filter(c => c.hit_count > 0).map(c => c.path || c.name)).size;
 
   if (loading) {
     return <div className="canaries loading p-4">Loading...</div>;
@@ -159,14 +165,15 @@ export default function Settings() {
               <option value="ssh_password">SSH Password</option>
               <option value="web_credential">Web Credential</option>
               <option value="api_token">API Token</option>
+              <option value="file">File Token</option>
+              <option value="dns">DNS Token</option>
             </select>
             <input
               type="text"
-              placeholder="Value (token/credential/path)"
+              placeholder="Deployment Path (optional)"
               className="cyber-input flex-1 min-w-[200px]"
-              value={formData.value}
-              onChange={(e) => setFormData({ ...formData, value: e.target.value })}
-              required
+              value={formData.path}
+              onChange={(e) => setFormData({ ...formData, path: e.target.value })}
             />
             <button type="submit" className="btn-base btn-md btn-green" disabled={submitting}>
               {submitting ? 'Creating...' : 'Create'}
@@ -182,7 +189,8 @@ export default function Settings() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {canaries.map((canary) => {
             const typeInfo = getTypeInfo(canary.canary_type);
-            const isTriggered = !!canary.triggered_at;
+            const isTriggered = canary.hit_count > 0;
+            const deploymentLocation = canary.path || canary.name;
             return (
               <div
                 key={canary.id}
@@ -194,37 +202,40 @@ export default function Settings() {
                     {typeInfo.label}
                   </span>
                   <span className={`px-2 py-1 text-xs font-bold ${isTriggered ? 'bg-cyber-red text-white' : 'bg-green-600 text-white'}`}>
-                    {isTriggered ? `TRIGGERED ${attackers}x` : 'NOT TRIGGERED'}
+                    {isTriggered ? `TRIGGERED ${canary.hit_count}x` : 'NOT TRIGGERED'}
                   </span>
                 </div>
 
-                {/* Value */}
+                {/* Value / Content */}
                 <div className="mb-3">
                   <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Value</div>
-                  <div className="font-mono text-sm text-cyan-400 truncate" title={canary.value}>
-                    {canary.value}
+                  <div className="font-mono text-sm text-cyan-400 truncate" title={canary.content || deploymentLocation}>
+                    {canary.content || deploymentLocation || '-'}
                   </div>
                 </div>
 
                 {/* Deployment Location */}
                 <div className="mb-3">
                   <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Deployment Location</div>
-                  <div className="text-sm text-white">{canary.name}</div>
+                  <div className="text-sm text-gray-300 truncate" title={deploymentLocation}>
+                    {deploymentLocation || '-'}
+                  </div>
                 </div>
 
                 {/* Created Date */}
-                <div className="mb-2">
+                <div className="mb-3">
                   <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Created</div>
-                  <div className="text-sm text-gray-300">{formatDate(canary.created_at)}</div>
+                  <div className="text-sm text-gray-300">
+                    {formatDate(canary.created_at)}
+                  </div>
                 </div>
 
-                {/* Triggered By */}
-                {isTriggered && canary.triggered_by && (
-                  <div className="pt-2 border-t border-cyber-gray mt-2">
-                    <div className="text-xs text-cyber-red uppercase tracking-wider">Triggered By</div>
-                    <div className="font-mono text-xs text-gray-400">{canary.triggered_by}</div>
-                  </div>
-                )}
+                {/* Status Badge */}
+                <div className="flex items-center">
+                  <span className={`px-2 py-1 text-xs font-bold ${canary.is_active ? 'bg-green-600 text-white' : 'bg-gray-600 text-white'}`}>
+                    {canary.is_active ? 'ACTIVE' : 'INACTIVE'}
+                  </span>
+                </div>
               </div>
             );
           })}
