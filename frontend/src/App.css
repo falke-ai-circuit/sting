@@ -652,3 +652,218 @@ tr.triggered {
 .alert-score.negative {
   color: #ff0040;
 }
+/* Cyber-Red Stat Card Styles */
+.stats-grid.cyber {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card.cyber {
+  background: linear-gradient(145deg, #111 0%, #1a0a0a 100%);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  padding: 1.5rem;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.stat-card.cyber::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #ff4d00, #ff0040, transparent);
+}
+
+.stat-card.cyber:hover {
+  border-color: #ff4d00;
+  box-shadow: 0 0 20px rgba(255, 77, 0, 0.3), 0 0 40px rgba(255, 0, 64, 0.15);
+  transform: translateY(-2px);
+}
+
+.stat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.stat-icon {
+  font-size: 1.25rem;
+  opacity: 0.8;
+}
+
+.stat-trend {
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+}
+
+.stat-trend.up {
+  color: #00ff80;
+  background: rgba(0, 255, 128, 0.1);
+}
+
+.stat-trend.down {
+  color: #ff0040;
+  background: rgba(255, 0, 64, 0.1);
+}
+
+.stat-value.cyber {
+  font-size: 2.5rem;
+  background: linear-gradient(135deg, #ff0040 0%, #ff4d00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: bold;
+  text-shadow: 0 0 20px rgba(255, 0, 64, 0.5);
+  letter-spacing: -0.02em;
+}
+
+.stat-label.cyber {
+  font-size: 0.85rem;
+  color: var(--text);
+  margin-top: 0.5rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-sublabel {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .stats-grid.cyber {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .stat-value.cyber {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .stats-grid.cyber {
+    grid-template-columns: 1fr;
+  }
+}
+/* Recent Attacks Section */
+.recent-attacks-section {
+  margin-bottom: 2rem;
+}
+
+.recent-attacks-section h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  font-weight: normal;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+
+.attacks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.attack-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.attack-item:hover {
+  background: rgba(255, 0, 64, 0.05);
+  border-color: rgba(255, 0, 64, 0.5);
+}
+
+.attack-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.attack-icon.ssh {
+  background: rgba(0, 255, 136, 0.15);
+  border: 1px solid rgba(0, 255, 136, 0.4);
+  color: #00ff88;
+}
+
+.attack-icon.web {
+  background: rgba(0, 136, 255, 0.15);
+  border: 1px solid rgba(0, 136, 255, 0.4);
+  color: #0088ff;
+}
+
+.attack-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.attack-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.attack-ip {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: var(--text);
+  font-weight: bold;
+}
+
+.attack-type {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.attack-geo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.geo-flag {
+  font-size: 1.2rem;
+}
+
+.geo-country {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.attack-time {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  min-width: 60px;
+  text-align: right;
+}
