@@ -1,10 +1,11 @@
 import { useState } from "react";
 import "./index.css";
 import Dashboard from "./components/Dashboard";
-import Analysis from "./components/Analysis";
 import Settings from "./components/Settings";
 import Honeypots from "./components/Honeypots";
 import Designer from "./components/Designer";
+import Analytics from "./components/Analytics";
+import Malware from "./components/Malware";
 import { CyberPanel } from "./components/CyberUI";
 
 type Tab = "dashboard" | "honeypots" | "canaries" | "analytics" | "malware" | "designer" | "config";
@@ -14,13 +15,6 @@ const Canaries = () => (
   <div className="p-6">
     <h2 className="text-2xl font-bold text-cyber-red mb-4">Canaries</h2>
     <p className="text-gray-400">Token-based canary deployment and monitoring.</p>
-  </div>
-);
-
-const Malware = () => (
-  <div className="p-6">
-    <h2 className="text-2xl font-bold text-cyber-red mb-4">Malware Analysis</h2>
-    <p className="text-gray-400">Captured payload analysis and sandbox results.</p>
   </div>
 );
 
@@ -46,7 +40,7 @@ function App() {
       case "canaries":
         return <Canaries />;
       case "analytics":
-        return <Analysis />;
+        return <Analytics />;
       case "malware":
         return <Malware />;
       case "designer":
