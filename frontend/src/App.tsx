@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import './index.css'
-import Dashboard from './components/Dashboard'
-import Alerts from './components/Alerts'
-import Sessions from './components/Sessions'
-import Analysis from './components/Analysis'
-import Settings from './components/Settings'
-import { CyberPanel } from './components/CyberUI'
+import { useState } from "react";
+import "./index.css";
+import Dashboard from "./components/Dashboard";
+import Analysis from "./components/Analysis";
+import Settings from "./components/Settings";
+import Honeypots from "./components/Honeypots";
+import Designer from "./components/Designer";
+import { CyberPanel } from "./components/CyberUI";
 
-type Tab = 'dashboard' | 'alerts' | 'sessions' | 'analysis' | 'settings'
+type Tab = "dashboard" | "honeypots" | "canaries" | "analytics" | "malware" | "designer" | "config";
+
+// Placeholder components for new tabs
+const Canaries = () => (
+  <div className="p-6">
+    <h2 className="text-2xl font-bold text-cyber-red mb-4">Canaries</h2>
+    <p className="text-gray-400">Token-based canary deployment and monitoring.</p>
+  </div>
+);
+
+const Malware = () => (
+  <div className="p-6">
+    <h2 className="text-2xl font-bold text-cyber-red mb-4">Malware Analysis</h2>
+    <p className="text-gray-400">Captured payload analysis and sandbox results.</p>
+  </div>
+);
 
 function App() {
-  const [activeTab, setActiveTab] = useState<Tab>('dashboard')
+  const [activeTab, setActiveTab] = useState<Tab>("dashboard");
 
   const tabs: { id: Tab; label: string; icon: string }[] = [
-    { id: 'dashboard', label: 'Dashboard', icon: '▣' },
-    { id: 'alerts', label: 'Alerts', icon: '◈' },
-    { id: 'sessions', label: 'Sessions', icon: '◇' },
-    { id: 'analysis', label: 'Analysis', icon: '◎' },
-    { id: 'settings', label: 'Settings', icon: '⚙' },
-  ]
+    { id: "dashboard", label: "Dashboard", icon: "▣" },
+    { id: "honeypots", label: "Honeypots", icon: "◈" },
+    { id: "canaries", label: "Canaries", icon: "◇" },
+    { id: "analytics", label: "Analytics", icon: "◎" },
+    { id: "malware", label: "Malware", icon: "☠" },
+    { id: "designer", label: "Designer", icon: "⚡" },
+    { id: "config", label: "Config", icon: "⚙" },
+  ];
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'dashboard': return <Dashboard />
-      case 'alerts': return <Alerts />
-      case 'sessions': return <Sessions />
-      case 'analysis': return <Analysis />
-      case 'settings': return <Settings />
-      default: return <Dashboard />
+      case "dashboard":
+        return <Dashboard />;
+      case "honeypots":
+        return <Honeypots />;
+      case "canaries":
+        return <Canaries />;
+      case "analytics":
+        return <Analysis />;
+      case "malware":
+        return <Malware />;
+      case "designer":
+        return <Designer />;
+      case "config":
+        return <Settings />;
+      default:
+        return <Dashboard />;
     }
-  }
+  };
 
   return (
     <div className="flex h-screen bg-cyber-black">
@@ -52,8 +79,8 @@ function App() {
               onClick={() => setActiveTab(tab.id)}
               className={`w-full flex items-center space-x-3 px-4 py-3 text-left transition-all duration-200 border-l-4 ${
                 activeTab === tab.id
-                  ? 'bg-cyber-red/10 border-cyber-red text-cyber-red'
-                  : 'border-transparent text-gray-400 hover:bg-cyber-gray/30 hover:text-white'
+                  ? "bg-cyber-red/10 border-cyber-red text-cyber-red"
+                  : "border-transparent text-gray-400 hover:bg-cyber-gray/30 hover:text-white"
               }`}
             >
               <span className="text-lg w-6 text-center">{tab.icon}</span>
@@ -66,12 +93,10 @@ function App() {
         </div>
       </aside>
       <main className="flex-1 overflow-auto p-6">
-        <CyberPanel>
-          {renderContent()}
-        </CyberPanel>
+        <CyberPanel>{renderContent()}</CyberPanel>
       </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
