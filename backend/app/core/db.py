@@ -80,6 +80,16 @@ async def _create_schema():
                 sha256 TEXT,
                 size_bytes BIGINT,
                 content BYTEA,
+                uploaded_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                malware_family TEXT,
+                vt_detections INTEGER,
+                analysis_status TEXT DEFAULT 'pending'
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                session_id UUID REFERENCES sessions(id),
+                filename TEXT,
+                sha256 TEXT,
+                size_bytes BIGINT,
+                content BYTEA,
                 uploaded_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
 

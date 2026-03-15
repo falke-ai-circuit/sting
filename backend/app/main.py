@@ -11,7 +11,7 @@ from app.proxy.ssh_proxy import start_ssh_proxy
 from app.proxy.http_proxy import start_http_proxy
 from app.lab.executor import lab_worker_loop
 from app.verdict.engine import verdict_engine
-from app.api.v1 import sessions, events, live, canaries, samples, export, stats, webhook, lab, snapshots, verdict
+from app.api.v1 import sessions, events, live, canaries, samples, export, stats, webhook, lab, snapshots, verdict, vt
 
 logging.basicConfig(
     level=logging.DEBUG if settings.debug else logging.INFO,
@@ -105,6 +105,7 @@ app.include_router(webhook.router, prefix=f"{settings.api_prefix}")
 app.include_router(lab.router, prefix=f"{settings.api_prefix}")
 app.include_router(snapshots.router, prefix=f"{settings.api_prefix}")
 app.include_router(verdict.router, prefix=f"{settings.api_prefix}")
+app.include_router(vt.router, prefix=f"{settings.api_prefix}")
 
 
 @app.get("/health")
