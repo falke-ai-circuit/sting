@@ -79,7 +79,7 @@ export default function Analytics() {
     <div className="analytics">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-cyber-red">Attack Analytics</h2>
+        <h2 className="section-header" style={{ color: '#ff0040', marginBottom: '1.5rem' }}>Attack Analytics</h2>
         <div className="flex gap-2">
           {['24h', '7d', '30d', '90d'].map((range) => (
             <button
@@ -115,7 +115,7 @@ export default function Analytics() {
 
       {/* Attack Trends Chart */}
       <div className="bg-cyber-dark border border-cyber-gray p-4 mb-6">
-        <h3 className="text-sm font-bold text-cyber-red uppercase tracking-wider mb-4">Attack Trends</h3>
+        <h3 className="section-header" style={{ marginBottom: '1rem' }}>Attack Trends</h3>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={attackTrendsData}>
@@ -151,7 +151,7 @@ export default function Analytics() {
       <div className="grid grid-cols-2 gap-6 mb-6">
         {/* Geographic Distribution */}
         <div className="bg-cyber-dark border border-cyber-gray p-4">
-          <h3 className="text-sm font-bold text-cyber-red uppercase tracking-wider mb-4">Geographic Distribution</h3>
+          <h3 className="section-header" style={{ marginBottom: '1rem' }}>Geographic Distribution</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -190,7 +190,7 @@ export default function Analytics() {
 
         {/* Protocol Breakdown */}
         <div className="bg-cyber-dark border border-cyber-gray p-4">
-          <h3 className="text-sm font-bold text-cyber-red uppercase tracking-wider mb-4">Protocol Breakdown</h3>
+          <h3 className="section-header" style={{ marginBottom: '1rem' }}>Protocol Breakdown</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -231,7 +231,7 @@ export default function Analytics() {
 
       {/* Top Attacked Ports - Horizontal Bar Chart */}
       <div className="bg-cyber-dark border border-cyber-gray p-4">
-        <h3 className="text-sm font-bold text-cyber-red uppercase tracking-wider mb-4">Top Attacked Ports</h3>
+        <h3 className="section-header" style={{ marginBottom: '1rem' }}>Top Attacked Ports</h3>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={portsData} layout="vertical">

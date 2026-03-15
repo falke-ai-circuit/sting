@@ -78,7 +78,7 @@ export default function Alerts() {
 
   return (
     <div className="events">
-      <h2>Alerts</h2>
+      <h2 className="section-header" style={{ color: '#ff0040', marginBottom: '1.5rem' }}>Alerts</h2>
       {events.length === 0 ? (
         <p className="empty">No alerts yet</p>
       ) : (

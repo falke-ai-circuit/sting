@@ -71,11 +71,12 @@ function App() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`w-full flex items-center space-x-3 px-4 py-3 text-left transition-all duration-200 border-l-4 ${
+              className={`w-full flex items-center space-x-3 px-4 py-3 text-left transition-all duration-200 ${
                 activeTab === tab.id
-                  ? "bg-cyber-red/10 border-cyber-red text-cyber-red"
-                  : "border-transparent text-gray-400 hover:bg-cyber-gray/30 hover:text-white"
+                  ? "btn-base btn-md btn-red"
+                  : "btn-base btn-md btn-gray"
               }`}
+              style={{ border: 'none', justifyContent: 'flex-start' }}
             >
               <span className="text-lg w-6 text-center">{tab.icon}</span>
               <span className="font-medium">{tab.label}</span>

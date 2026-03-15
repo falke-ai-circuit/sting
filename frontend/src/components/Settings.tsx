@@ -102,7 +102,7 @@ export default function Settings() {
     <div className="canaries">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-cyber-red">Canaries</h2>
+        <h2 className="section-header" style={{ color: '#ff0040', marginBottom: '1.5rem' }}>Canaries</h2>
       </div>
 
       {/* Stats Row */}

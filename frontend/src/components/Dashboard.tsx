@@ -275,7 +275,7 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard">
-      <h2>Dashboard</h2>
+      <h2 className="section-header" style={{ color: '#ff0040', marginBottom: '1.5rem' }}>Dashboard</h2>
 
       {/* Threat Level Indicator */}
       <div className="threat-panel">
@@ -318,7 +318,7 @@ export default function Dashboard() {
       {/* Charts Section with Recharts */}
       <div className="charts-grid">
         <div className="chart-card">
-          <h3>Attack Timeline (24h)</h3>
+          <h3 className="section-header" style={{ marginBottom: '1rem' }}>Attack Timeline (24h)</h3>
           <div className="chart-container">
             <ResponsiveContainer width="100%" height={150}>
               <BarChart data={getSessionsByHour()}>
@@ -345,7 +345,7 @@ export default function Dashboard() {
         </div>
 
         <div className="chart-card">
-          <h3>Attack Types</h3>
+          <h3 className="section-header" style={{ marginBottom: '1rem' }}>Attack Types</h3>
           <div className="chart-container">
             <ResponsiveContainer width="100%" height={150}>
               <PieChart>
@@ -370,7 +370,7 @@ export default function Dashboard() {
 
       {/* Cowrie Connector Status */}
       <div className="cowrie-status">
-        <h3>Cowrie Honeypot</h3>
+        <h3 className="section-header" style={{ marginBottom: '1rem' }}>Cowrie Honeypot</h3>
         <div className="cowrie-grid">
           <div className="cowrie-card">
             <div className={`status-indicator ${cowrieStatus.active ? "active" : "inactive"}`}></div>
@@ -390,7 +390,7 @@ export default function Dashboard() {
 
       {/* Top Attacking IPs Table */}
       <div className="top-ips-section">
-        <h3>Top Attacking IPs</h3>
+        <h3 className="section-header" style={{ marginBottom: '1rem' }}>Top Attacking IPs</h3>
         {topIPs.length === 0 ? (
           <p className="empty">No attack data available</p>
         ) : (
@@ -419,7 +419,7 @@ export default function Dashboard() {
 
       {/* Recent Attacks List */}
       <div className="recent-attacks-section">
-        <h3>Recent Attacks</h3>
+        <h3 className="section-header" style={{ marginBottom: '1rem' }}>Recent Attacks</h3>
         <div className="attacks-list">
           {getRecentAttacks().length === 0 ? (
             <p className="empty">No recent attacks</p>
@@ -446,7 +446,7 @@ export default function Dashboard() {
 
       {/* Recent Alerts Feed */}
       <div className="alerts-feed">
-        <h3>Recent Alerts</h3>
+        <h3 className="section-header" style={{ marginBottom: '1rem' }}>Recent Alerts</h3>
         {alerts.length === 0 ? (
           <p className="empty">No recent alerts</p>
         ) : (

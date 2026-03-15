@@ -93,7 +93,7 @@ export default function Honeypots() {
   return (
     <div className="honeypots">
       <div className="header-row">
-        <h2>Honeypots</h2>
+        <h2 className="section-header" style={{ color: '#ff0040', marginBottom: '1.5rem' }}>Honeypots</h2>
         <div className="header-actions">
           <button className="btn-base btn-sm btn-gray" onClick={fetchHoneypots}>
             Refresh

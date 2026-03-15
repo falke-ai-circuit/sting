@@ -77,7 +77,7 @@ export default function Designer() {
 
         {/* Quick Actions */}
         <div className="p-4 border-t border-cyber-gray">
-          <h3 className="text-gray-500 font-bold text-xs uppercase tracking-wider mb-3">Quick Actions</h3>
+          <h3 className="section-header" style={{ color: '#666', marginBottom: '0.75rem' }}>Quick Actions</h3>
           <div className="space-y-2">
             <button className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-cyber-gray/30 transition-colors">
               <span className="w-5 h-5 flex items-center justify-center border border-gray-500 text-xs">+</span>
@@ -114,7 +114,7 @@ export default function Designer() {
             {/* Basic Settings */}
             <CyberCard>
               <div className="p-4 border-b border-cyber-gray">
-                <h3 className="text-cyber-red font-bold text-sm uppercase tracking-wider">Basic Settings</h3>
+                <h3 className="section-header" style={{ marginBottom: '0.75rem' }}>Basic Settings</h3>
               </div>
               <div className="p-4 space-y-4">
                 <div>
@@ -150,7 +150,7 @@ export default function Designer() {
             {/* Response Simulation */}
             <CyberCard>
               <div className="p-4 border-b border-cyber-gray">
-                <h3 className="text-cyber-red font-bold text-sm uppercase tracking-wider">Response Simulation</h3>
+                <h3 className="section-header" style={{ marginBottom: '0.75rem' }}>Response Simulation</h3>
               </div>
               <div className="p-4 space-y-4">
                 <div>
@@ -186,7 +186,7 @@ export default function Designer() {
             {/* Trap Triggers */}
             <CyberCard>
               <div className="p-4 border-b border-cyber-gray">
-                <h3 className="text-cyber-red font-bold text-sm uppercase tracking-wider">Trap Triggers</h3>
+                <h3 className="section-header" style={{ marginBottom: '0.75rem' }}>Trap Triggers</h3>
               </div>
               <div className="p-4 space-y-4">
                 <div className="flex items-center justify-between">
@@ -222,7 +222,7 @@ export default function Designer() {
             {/* Alerts */}
             <CyberCard>
               <div className="p-4 border-b border-cyber-gray">
-                <h3 className="text-cyber-red font-bold text-sm uppercase tracking-wider">Alerts</h3>
+                <h3 className="section-header" style={{ marginBottom: '0.75rem' }}>Alerts</h3>
               </div>
               <div className="p-4 space-y-4">
                 <div className="flex items-center justify-between">

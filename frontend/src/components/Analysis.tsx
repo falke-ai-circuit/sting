@@ -52,7 +52,7 @@ export default function Analysis() {
 
   return (
     <div className="samples">
-      <h2>Payload Analysis</h2>
+      <h2 className="section-header" style={{ color: '#ff0040', marginBottom: '1.5rem' }}>Payload Analysis</h2>
       {samples.length === 0 ? (
         <p className="empty">No samples uploaded</p>
       ) : (

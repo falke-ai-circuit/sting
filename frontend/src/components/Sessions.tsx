@@ -79,7 +79,7 @@ export default function Sessions() {
 
   return (
     <div className="sessions">
-      <h2>Sessions</h2>
+      <h2 className="section-header" style={{ color: '#ff0040', marginBottom: '1.5rem' }}>Sessions</h2>
       <div className="filter-bar">
         <label>Filter by state:</label>
         <select value={filter} onChange={(e) => setFilter(e.target.value)}>
