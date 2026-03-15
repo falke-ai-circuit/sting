@@ -38,6 +38,22 @@ const API_BASE = "/api/v1";
 
 const COLORS = ["#ff0040", "#00ff88", "#0088ff", "#ffaa00", "#aa00ff", "#00ffff"];
 
+// SVG Icons for SSH and Web
+const SSHIcons = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="4 17 10 11 4 5" />
+    <line x1="12" y1="19" x2="20" y2="19" />
+  </svg>
+);
+
+const WebIcons = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10" />
+    <line x1="2" y1="12" x2="22" y2="12" />
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+  </svg>
+);
+
 // Stat card component with cyber-red styling
 interface StatCardProps {
   value: number | string;
@@ -206,6 +222,36 @@ export default function Dashboard() {
       .map((item) => ({ ...item, protocols: Array.from(item.protocols).join(", ") }));
   };
 
+  // Get relative time string
+  const getRelativeTime = (ts: string) => {
+    if (!ts) return "-";
+    const now = new Date();
+    const then = new Date(ts);
+    const diffMs = now.getTime() - then.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+
+    if (diffMins < 1) return "just now";
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return `${Math.floor(diffHours / 24)}d ago`;
+  };
+
+  // Get recent attacks from sessions
+  const getRecentAttacks = () => {
+    return sessions
+      .filter((s) => s.source_ip && s.source_ip !== "127.0.0.1")
+      .sort((a, b) => new Date(b.started_at).getTime() - new Date(a.started_at).getTime())
+      .slice(0, 15)
+      .map((s) => ({
+        ip: s.source_ip,
+        type: s.protocol?.toUpperCase() || "UNKNOWN",
+        time: s.started_at,
+        country: "🌍",
+        countryName: "Unknown",
+      }));
+  };
+
   // Cowrie status
   const getCowrieStatus = () => {
     const now = new Date();
@@ -369,6 +415,33 @@ export default function Dashboard() {
             </tbody>
           </table>
         )}
+      </div>
+
+      {/* Recent Attacks List */}
+      <div className="recent-attacks-section">
+        <h3>Recent Attacks</h3>
+        <div className="attacks-list">
+          {getRecentAttacks().length === 0 ? (
+            <p className="empty">No recent attacks</p>
+          ) : (
+            getRecentAttacks().map((attack, idx) => (
+              <div key={idx} className="attack-item">
+                <div className={`attack-icon ${attack.type === "SSH" ? "ssh" : "web"}`}>
+                  {attack.type === "SSH" ? <SSHIcons /> : <WebIcons />}
+                </div>
+                <div className="attack-details">
+                  <span className="attack-ip">{attack.ip}</span>
+                  <span className="attack-type">{attack.type} Attack</span>
+                </div>
+                <div className="attack-geo">
+                  <span className="geo-flag">{attack.country}</span>
+                  <span className="geo-country">{attack.countryName}</span>
+                </div>
+                <span className="attack-time">{getRelativeTime(attack.time)}</span>
+              </div>
+            ))
+          )}
+        </div>
       </div>
 
       {/* Recent Alerts Feed */}
